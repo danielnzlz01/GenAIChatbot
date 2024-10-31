@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta</title>
+    <style>
+        body {
+            background-color: #181818;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #282828;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            resize: vertical;
+            background-color: #383838;
+            color: #fff;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        #recorder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        #recordButton {
+            background-image: url('{{ url_for("static", filename="mic.png") }}');
+            background-size: 50%;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 50px;
+            height: 50px;
+            border: none;
+            cursor: pointer;
+        }
+        #stopButton {
+            background-color: #FF0000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: none;
+        }
+        #recordingStatus {
+            margin-left: 10px;
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Encuesta</h1>
+        {% if mensaje_final %}
+            <p>{{ mensaje_final }}</p>
+        {% else %}
+            <p>Pregunta {{ indice_pregunta + 1 }}:</p>
+            <p>{{ pregunta }}</p>
+            <div id="recorder">
+                <button id="recordButton"></button>
+                <button id="stopButton" style="display:none;">Stop</button>
+                <span id="recordingStatus">grabando</span>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                <textarea name="respuesta" placeholder="Escribe tu respuesta aquí..."></textarea>
+                <input type="file" name="audio" id="audioFile" style="display:none">
+                <button type="submit" id="submitButton" disabled>Enviar</button>
+            </form>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const recordButton = document.getElementById('recordButton');
+                    const stopButton = document.getElementById('stopButton');
+                    const recordingStatus = document.getElementById('recordingStatus');
+                    const audioFile = document.getElementById('audioFile');
+                    let mediaRecorder = null;
+                    let chunks = [];
+            
+                    recordButton.addEventListener('click', () => {
+                        if (!mediaRecorder) {
+                            navigator.mediaDevices.getUserMedia({ audio: true })
+                                .then(stream => {
+                                    mediaRecorder = new MediaRecorder(stream);
+                                    mediaRecorder.start();
+                                    recordingStatus.style.display = 'inline';
+                                    recordButton.disabled = true;
+                                    stopButton.style.display = 'inline';
+            
+                                    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+            
+                                    mediaRecorder.onstop = () => {
+                                        const blob = new Blob(chunks, { type: 'audio/mp3' });
+                                        chunks = [];
+                                        const url = URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.style.display = 'none';
+                                        a.href = url;
+                                        
+                                        const currentDateTime = new Date().toISOString().replace(/[-:.]/g, '-').replace('T', '_').split('.')[0].slice(0, -1);
+                                        a.download = `recording_${currentDateTime}.mp3`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        document.body.removeChild(a);
+                                        
+                                        recordingStatus.style.display = 'none'; 
+                                        mediaRecorder = null; 
+                                    };
+                                })
+                                .catch(error => console.error('Error accessing the microphone:', error));
+                        }
+                    });
+            
+                    stopButton.addEventListener('click', () => {
+                        if (mediaRecorder) {
+                            mediaRecorder.stop();
+                            recordButton.disabled = false; 
+                            stopButton.style.display = 'none'; 
+                            recordingStatus.style.display = 'none'; 
+                            setTimeout(() => {
+                                fetch('/load_audio', {
+                                    method: 'POST'
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data.audio_yn);
+                                    const audio_y = data.audio_yn;
+                                    updateSubmitButton(audio_y);
+                                })
+                                .catch(error => console.error('Error:', error));
+                            }, 1000);
+                        }
+                    });
+                    function updateSubmitButton(audio_y) {
+                        const submitButton = document.getElementById('submitButton');
+                        if (audio_y) {
+                            submitButton.disabled = false; 
+                        } else {
+                            submitButton.disabled = true; 
+                        }
+                        console.log('Submit button updated:', submitButton.disabled); 
+                    }
+                    const submitButton = document.getElementById('submitButton');
+                    submitButton.addEventListener('click', () => {
+                        if (audio_y) {
+                            submitButton.disabled = true; 
+                            console.log('Submit button disabled after click:', submitButton.disabled); 
+                        }
+                    });
+                });
+            </script>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const textarea = document.querySelector('textarea');
+                    const submitButton = document.getElementById('submitButton');
+                    
+                    function updateSubmitButton() {
+                        submitButton.disabled = textarea.value.trim() === '';
+                    }
+
+                    textarea.addEventListener('input', updateSubmitButton);
+
+                    textarea.addEventListener('keyup', function(event) {
+                        if (event.key === 'Enter') {
+                            event.preventDefault(); 
+                            if (!submitButton.disabled) {
+                                document.querySelector('form').submit();
+                            }
+                        }
+                    });
+                });
+            </script>
+        {% endif %}
+    </div>
+</body>
+</html>

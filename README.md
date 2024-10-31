@@ -12,7 +12,7 @@ A Flask application that integrates with Google Generative AI to process user in
 1. Clone the repository
 
 ```bash
-git clone 
+git clone https://github.com/danielnzlz01/GenAIChatbot.git
 cd 
 ```
 
