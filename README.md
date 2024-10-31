@@ -25,7 +25,7 @@ source venv/bin/activate
 3. Install dependencies
 
 ```bash
-pip install -r /src/requirements.txt
+pip install -r /src/req.txt
 ```
 
 4. Set up environment variables
