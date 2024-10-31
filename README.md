@@ -15,13 +15,20 @@ A Flask application that integrates with Google Generative AI to process user in
 git clone https://github.com/danielnzlz01/GenAIChatbot.git
 ```
 
-2. Install dependencies
+2. Create and activate a virtual environment
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+3. Install dependencies
 
 ```bash
 pip install -r /src/requirements.txt
 ```
 
-3. Set up environment variables
+4. Set up environment variables
 
 ```bash
 export GOOGLE_API_KEY=your_api_key
