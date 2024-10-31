@@ -49,5 +49,5 @@ python src/data_profiling.py
 
 ## License
 
-This project is licensed under the GNU GPLv3 - see the [LICENSE](COPYING) file for details.
+This project is licensed under the GNU GPLv3 - see the [COPYING](COPYING) file for details.
 
