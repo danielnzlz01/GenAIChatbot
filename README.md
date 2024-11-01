@@ -41,7 +41,7 @@ export GOOGLE_API_KEY=your_api_key
 5. Create and set up `uploads` directory for file uploads
 
 ```bash 
-mkdir src/uploads
+mkdir uploads
 ```
 
 **Important** In your browser, set download location to `src/uploads` for audio functionality to work.
