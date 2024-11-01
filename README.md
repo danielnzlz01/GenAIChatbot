@@ -9,10 +9,14 @@ A Flask application that integrates with Google Generative AI to process user in
 
 ## Installation
 
-1. Clone the repository
+1. Clone the repository and navigate to the project directory
 
 ```bash
 git clone https://github.com/danielnzlz01/GenAIChatbot.git
+```
+
+```bash
+cd GenAIChatbot
 ```
 
 2. Create and activate a virtual environment
