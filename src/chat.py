@@ -168,7 +168,7 @@ def recurring_themes():
                                 """)
     try:
         chat = model.start_chat(history=chat.history, temperature=0)
-        response = chat.send_message("Analyze the chat history.")
+        response = chat.send_message("Analyze the chat history. Only consider the responses when 'role' == 'user' and not when 'role' == 'model'.")
         with open('./data/recurring_themes.txt', 'w', encoding='utf-8') as f:
             f.write(response.text)
         with open('./data/recurring_themes.txt', 'r', encoding='utf-8') as f:
@@ -179,7 +179,7 @@ def recurring_themes():
             loaded_chat_history = json.load(f)
         loaded_chat_history = [f"{message['role']}: {message['text']}" for message in loaded_chat_history]
         loaded_chat_history = "\n".join(loaded_chat_history)
-        prompt = f"Analyze the chat history: {loaded_chat_history}"
+        prompt = f"Analyze the chat history. Only consider the responses when 'role' == 'user' and not when 'role' == 'model'. {loaded_chat_history}"
         response = model.generate_content(prompt)
         with open('./data/recurring_themes.txt', 'w', encoding='utf-8') as f:
             f.write(response.text)
