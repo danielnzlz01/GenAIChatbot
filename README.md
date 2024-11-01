@@ -105,7 +105,7 @@ python src/data_profile.py
 
 ## Future Work
 
-- Implement a database to store user inputs and responses for further analysis.
+- Deploy the application to a cloud service and integrate with a database to store multiple survey results.
 - Implement a specialized model for recurring theme and sentiment analysis extraction.
 - Implement better data visualization techniques.
 
