@@ -34,6 +34,8 @@ pip install -r src/req.txt
 
 4. Set up environment variables
 
+Visit [https://makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey) to get your Google API Key.
+
 ```bash
 export GOOGLE_API_KEY=your_api_key
 ```
@@ -91,7 +93,7 @@ def start_chat(
 python src/chat.py
 ```
 
-2. Open your browser and navigate to `http://localhost:5000`
+2. Open your browser and navigate to [http://localhost:5000](http://localhost:5000)
 
 3. After survey completion, run the analysis script
 
