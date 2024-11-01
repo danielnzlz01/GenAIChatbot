@@ -101,7 +101,13 @@ python src/data_profile.py
 
 ## Notes
 
-- Ensure the `uploads` and `data` directories exists; the scripts will create them if they don't.
+- Wordclouds can be a hit or miss depending on the data as they only display the most frequent words so if the recurring themes are in multiple words, they may not be displayed correctly.
+
+## Future Work
+
+- Implement a database to store user inputs and responses for further analysis.
+- Implement a specialized model for recurring theme and sentiment analysis extraction.
+- Implement better data visualization techniques.
 
 ## License
 
