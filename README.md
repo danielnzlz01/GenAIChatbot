@@ -34,6 +34,14 @@ pip install -r src/req.txt
 export GOOGLE_API_KEY=your_api_key
 ```
 
+5. Create and set up `uploads` directory for file uploads
+
+```bash 
+mkdir src/uploads
+```
+
+**Important** In your browser, set download location to `src/uploads` for audio functionality to work.
+
 ## Modifications 
 
 - Extended `start_chat` method: Added a `temperature` parameter to allow customization of the temperature setting for chat sessions. Edit the `start_chat` method in `/lib/python3.x.x/site-packages/google/generativeai/generative_models.py` as follows:
