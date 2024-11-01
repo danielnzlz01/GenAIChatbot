@@ -96,7 +96,7 @@ python src/chat.py
 3. After survey completion, run the analysis script
 
 ```bash
-python src/data_profiling.py
+python src/data_profile.py
 ```
 
 ## Notes
