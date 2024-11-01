@@ -46,7 +46,11 @@ export GOOGLE_API_KEY=your_api_key
 mkdir uploads
 ```
 
-**Important** In your browser, set download location to `src/uploads` for audio functionality to work.
+**Important** 
+
+- In your browser, set download location to `uploads` folder for audio functionality to work. Turn off the browser prompt for downloads. 
+
+For chrome, navigate to [chrome://settings/downloads](chrome://settings/downloads).
 
 ## Modifications 
 
