@@ -34,6 +34,43 @@ pip install -r src/req.txt
 export GOOGLE_API_KEY=your_api_key
 ```
 
+## Modifications 
+
+- Extended `start_chat` method: Added a `temperature` parameter to allow customization of the temperature setting for chat sessions. Edit the `start_chat` method in `/lib/python3.x.x/site-packages/google/generativeai/generative_models.py` as follows:
+
+```python
+def start_chat(
+        self,
+        *,
+        history: Iterable[content_types.StrictContentType] | None = None,
+        enable_automatic_function_calling: bool = False,
+        temperature: float | None = None,
+    ) -> ChatSession:
+        """Returns a `genai.ChatSession` attached to this model.
+
+        >>> model = genai.GenerativeModel()
+        >>> chat = model.start_chat(history=[...], temperature=0.7)
+        >>> response = chat.send_message("Hello?")
+
+        Arguments:
+            history: An iterable of `protos.Content` objects, or equivalents to initialize the session.
+            temperature: The temperature setting for the chat session.
+        """
+        if self._generation_config.get("candidate_count", 1) > 1:
+            raise ValueError(
+                "Invalid configuration: The chat functionality does not support `candidate_count` greater than 1."
+            )
+
+        if temperature is not None:
+            self._generation_config["temperature"] = temperature
+
+        return ChatSession(
+            model=self,
+            history=history,
+            enable_automatic_function_calling=enable_automatic_function_calling,
+        )
+```
+
 ## Usage
 
 1. Run the application
